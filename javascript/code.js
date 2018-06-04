@@ -30,26 +30,41 @@ var char4 = {
 
 //function that handles the selection of characters and animates the growth of the players selected character
 var pickChar = function() {
-    if (activeCharacter && !playing) {
-        $("#instruction-text").text("Are you sure?")
-        $("#yes-no").append("<button type='button' class='btn-primary mr-3' id='yes-btn' value='yes';>Yes</button>");
-        $("#yes-no").append("<button type='button' class='btn-primary ml-3' id='no-btn' value='no'>No</button>");
-    };
+    $("#instruction-text").text("Are you sure?")
+    $("#yes-no").append("<button type='button' class='btn-primary mr-3' id='yes-btn' value='yes';>Yes</button>");
+    $("#yes-no").append("<button type='button' class='btn-primary ml-3' id='no-btn' value='no'>No</button>");
     $("#yes-btn").on("click", function (characterPicked){
-        playing = true;
-        $("#yes-btn").remove();
-        $("#no-btn").remove();
-        $(activeCharacterID).animate({ height: "300px" });
-        $(activeCharacterID).animate({ width: "300px" });
-        selectOpponent();
+        if (playing = true && !activeEnemy) {
+            $("#yes-btn").remove();
+            $("#no-btn").remove();
+            $(activeCharacterID).animate({ height: "300px" });
+            $(activeCharacterID).animate({ width: "300px" });
+            selectOpponent();
+        }
+        else if (playing = true && activeEnemy) {
+            $("#yes-btn").remove();
+            $("#no-btn").remove();
+            $(activeEnemyID).animate({ height: "250px" });
+            $(activeEnemyID).animate({ width: "250px" });
+            beginGame();
+        }
+
     });
     $("#no-btn").on("click", function (){
+        if (!playing) {
         activeCharacter = "";
         $("#yes-btn").remove();
         $("#no-btn").remove();
         $("#instruction-text").text("Select a character");
-        console.log(activeCharacter);
-        console.log(playing);
+        console.log(activeEnemy)
+        }
+        else if (playing) {
+            activeEnemy = "";
+            $("#yes-btn").remove();
+            $("#no-btn").remove();
+            $("#instruction-text").text("Select an opponent");
+            console.log(activeEnemy);
+        };
     
     })
 };
@@ -57,10 +72,13 @@ var pickChar = function() {
 
 
 var selectOpponent = function() {
-    if (playing) {
+    if (!activeEnemy) {
         $("#instruction-text").text("Select an opponent")
     }
-}
+    else if (activeEnemy) {
+        $("#instruction-text").text("Time to battle!");
+    }
+};
 
 //functions that handle the initial picking of the characters and asks the player to confirm who they selected
 $("#char-1-button").on("click", function () {
@@ -68,10 +86,13 @@ $("#char-1-button").on("click", function () {
         activeCharacter = this.value;
         activeCharacterID = "#char-1-button";
         pickChar(activeCharacterID);
+        console.log(activeEnemy)
     }
     else if (playing && !activeEnemy) {
         activeEnemy = this.value;
-        activeEnemyID = "char-1-button"
+        activeEnemyID = "#char-1-button";
+        pickChar(activeEnemyID);
+        console.log(activeEnemy);
     }
 });
 
@@ -81,13 +102,25 @@ $("#char-2-button").on("click", function () {
         activeCharacterID = "#char-2-button";
         pickChar(activeCharacterID);
     }
-})
+    else if (playing && !activeEnemy) {
+        activeEnemy = this.value;
+        activeEnemyID = "#char-2-button";
+        pickChar(activeEnemyID);
+        console.log(activeEnemy);
+    }
+});
 
 $("#char-3-button").on("click", function () {
     if (!activeCharacter) {
         activeCharacter = this.value;
         activeCharacterID = "#char-3-button";
         pickChar(activeCharacterID);
+    }
+    else if (playing && !activeEnemy) {
+        activeEnemy = this.value;
+        activeEnemyID = "#char-3-button";
+        pickChar(activeEnemyID);
+        console.log(activeEnemy);
     }
 })
 
@@ -96,6 +129,12 @@ $("#char-4-button").on("click", function () {
         activeCharacter = this.value;
         activeCharacterID = "#char-4-button";
         pickChar(activeCharacterID);
+    }
+    else if (playing && !activeEnemy) {
+        activeEnemy = this.value;
+        activeEnemyID = "#char-4-button";
+        pickChar(activeEnemyID);
+        console.log(activeEnemy);
     }
 })
 
