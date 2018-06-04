@@ -2,7 +2,9 @@ var activeCharacter = "";
 var playing = false;
 var confirm = "";    
 var activeCharacterID = "";
+var activeCharacterOBJ = ""
 var activeEnemy = "";
+var activeEnemyOBJ = "";
 
 var char1 = {
     hitPoints: 10,
@@ -17,7 +19,7 @@ var char2 = {
 };
 
 var char3 = {
-    hitpoints: 8,
+    hitPoints: 8,
     attack: 3,
     counterAttack: 1,
 }
@@ -39,6 +41,7 @@ var pickChar = function() {
             $("#no-btn").remove();
             $(activeCharacterID).animate({ height: "300px" });
             $(activeCharacterID).animate({ width: "300px" });
+            $(activeCharacterID).attr("value", "active-character");
             selectOpponent();
         }
         else if (playing = true && activeEnemy) {
@@ -46,6 +49,7 @@ var pickChar = function() {
             $("#no-btn").remove();
             $(activeEnemyID).animate({ height: "250px" });
             $(activeEnemyID).animate({ width: "250px" });
+            $(activeEnemyID).attr("value", "active-enemy");
             beginGame();
         }
 
@@ -75,9 +79,43 @@ var selectOpponent = function() {
     if (!activeEnemy) {
         $("#instruction-text").text("Select an opponent")
     }
-    else if (activeEnemy) {
-        $("#instruction-text").text("Time to battle!");
+};
+
+var beginGame = function () {
+    $("#instruction-text").text("Time to battle!");
+    if (activeCharacterOBJ.hitPoints > 0 && activeEnemyOBJ.hitPoints > 0) {
+        console.log("you made it here")
+        attacker();
     }
+    else if (activeCharacterOBJ.hitPoints > 0 && activeEnemyOBJ.hitPoints < 1) {
+        $("#instruction-text").text("You have defeated your opponent");
+    }
+    else if (activeCharacterOBJ.hitPoints < 1) {
+        $("#instruction-text").text("You are dead");
+    };
+};
+
+var attacker = function() {
+    $(".char-select-button").on("click", function() {
+        if (this.value === "active-enemy") {
+            activeEnemyOBJ.hitPoints -= activeCharacterOBJ.attack;
+            console.log(activeCharacterOBJ.hitPoints);
+            console.log(activeCharacterOBJ.attack);
+            console.log(activeCharacterOBJ.counterAttack);
+            console.log(activeCharacterOBJ['hitPoints']);
+            console.log(activeEnemyOBJ);
+            console.log(activeEnemyOBJ.hitPoints);
+            beginGame();
+        }
+        else if (this.value === "active-character") {
+            console.log("don't attack yourself");
+            beginGame();
+        }
+        else {
+            console.log("not working")
+            beginGame();
+        };
+    });
 };
 
 //functions that handle the initial picking of the characters and asks the player to confirm who they selected
@@ -85,12 +123,14 @@ $("#char-1-button").on("click", function () {
     if (!playing) {
         activeCharacter = this.value;
         activeCharacterID = "#char-1-button";
+        activeCharacterOBJ = char1;
         pickChar(activeCharacterID);
         console.log(activeEnemy)
     }
     else if (playing && !activeEnemy) {
         activeEnemy = this.value;
         activeEnemyID = "#char-1-button";
+        activeEnemyOBJ = char1;
         pickChar(activeEnemyID);
         console.log(activeEnemy);
     }
@@ -100,11 +140,13 @@ $("#char-2-button").on("click", function () {
     if (!activeCharacter) {
         activeCharacter = this.value;
         activeCharacterID = "#char-2-button";
+        activeCharacterOBJ = char2;
         pickChar(activeCharacterID);
     }
     else if (playing && !activeEnemy) {
         activeEnemy = this.value;
         activeEnemyID = "#char-2-button";
+        activeEnemyOBJ = char2;
         pickChar(activeEnemyID);
         console.log(activeEnemy);
     }
@@ -114,11 +156,13 @@ $("#char-3-button").on("click", function () {
     if (!activeCharacter) {
         activeCharacter = this.value;
         activeCharacterID = "#char-3-button";
+        activeCharacterOBJ = char3;
         pickChar(activeCharacterID);
     }
     else if (playing && !activeEnemy) {
         activeEnemy = this.value;
         activeEnemyID = "#char-3-button";
+        activeEnemyOBJ = char3;
         pickChar(activeEnemyID);
         console.log(activeEnemy);
     }
@@ -128,11 +172,13 @@ $("#char-4-button").on("click", function () {
     if (!activeCharacter) {
         activeCharacter = this.value;
         activeCharacterID = "#char-4-button";
+        activeCharacterOBJ = char4;
         pickChar(activeCharacterID);
     }
     else if (playing && !activeEnemy) {
         activeEnemy = this.value;
         activeEnemyID = "#char-4-button";
+        activeEnemyOBJ = char4;
         pickChar(activeEnemyID);
         console.log(activeEnemy);
     }
