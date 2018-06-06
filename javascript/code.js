@@ -54,7 +54,7 @@ var pickChar = function() {
             $(activeEnemyID).animate({ width: "250px" });
             $(activeEnemyID).attr("value", "active-enemy");
             playing = true;
-            beginGame();
+            lifeChecker();
         }
 
     });
@@ -84,21 +84,21 @@ var selectOpponent = function() {
     }
 };
 
-var beginGame = function () {
+var lifeChecker = function () {
     
     if (activeCharacterOBJ.hitPoints > 0 && activeEnemyOBJ.hitPoints > 0 && playing) {
         $("#instruction-text").text("Time to battle!");
-        console.log(activeEnemyOBJ);
+        console.log(activeEnemyOBJ + "this is beginGame");
         attacker();
     }
     else if (activeCharacterOBJ.hitPoints > 0 && activeEnemyOBJ.hitPoints < 1) {
         console.log("the enemy is dead");
         $(activeEnemyID).animate({ height: "200px" });
         $(activeEnemyID).animate({ width: "200px" });
-        $("#instruction-text").text("You defeated " + activeEnemy);
         playing = false;
         activeEnemy="";
         activeEnemyOBJ="";
+        $("#instruction-text").text("You defeated " + activeEnemy);
         anotherEnemy();
     }
     else if (activeCharacterOBJ.hitPoints < 1) {
@@ -109,19 +109,23 @@ var beginGame = function () {
 
 var attacker = function() {
     $(".char-select-button").on("click", function() {
+        console.log("attacker ran");
         if (this.value === "active-enemy" && playing === true) {
+            console.log("attacker ran and did damage");
             activeEnemyOBJ.hitPoints -= activeCharacterOBJ.attack;
-            console.log(activeEnemyOBJ.hitPoints);
-            beginGame();
+            activeCharacterOBJ.hitPoints -= activeEnemyOBJ.counterAttack;
+            console.log(activeCharacterOBJ.hitPoints);
+            lifeChecker();
     
         }
         else if (this.value === "active-character" && playing === true) {
-            console.log("don't attack yourself");
-            beginGame();
+            $("#instruction-text").text("Don't attack yourself");
+            console.log("attacker rand and did not do damage")
+        
         }
-        else {
-            console.log("not working")
-            beginGame();
+        else if (playing === true) {
+            $("#instruction-text").text("You must attack the active enemy");
+            console.log("attacker rand and made it to the final else if");
         };
     });
 };
@@ -139,7 +143,7 @@ $("#char-1-button").on("click", function () {
         pickChar();
         console.log(activeEnemy)
     }
-    else if (charSelected && !activeEnemy && char1.hitPoints > 0) {
+    else if (charSelected && !activeEnemy && char1.hitPoints > 0 && activeCharacterOBJ != char1) {
         activeEnemy = this.value;
         activeEnemyID = "#char-1-button";
         activeEnemyOBJ = char1;
@@ -156,13 +160,13 @@ $("#char-2-button").on("click", function () {
         activeCharacter = this.value;
         activeCharacterID = "#char-2-button";
         activeCharacterOBJ = char2;
-        pickChar(activeCharacterID);
+        pickChar();
     }
-    else if (charSelected && !activeEnemy && char2.hitPoints > 0) {
+    else if (charSelected && !activeEnemy && char2.hitPoints > 0 && activeCharacterOBJ != char2) {
         activeEnemy = this.value;
         activeEnemyID = "#char-2-button";
         activeEnemyOBJ = char2;
-        pickChar(activeEnemyID);
+        pickChar();
         console.log(activeEnemy);
         
     }
@@ -176,13 +180,13 @@ $("#char-3-button").on("click", function () {
         activeCharacter = this.value;
         activeCharacterID = "#char-3-button";
         activeCharacterOBJ = char3;
-        pickChar(activeCharacterID);
+        pickChar();
     }
-    else if (charSelected && !activeEnemy && char3.hitPoints > 0) {
+    else if (charSelected && !activeEnemy && char3.hitPoints > 0 && activeCharacterOBJ != char3) {
         activeEnemy = this.value;
         activeEnemyID = "#char-3-button";
         activeEnemyOBJ = char3;
-        pickChar(activeEnemyID);
+        pickChar();
         console.log(activeEnemy);
     }
     else if (charSelected && !activeEnemy && char3.hitPoints < 1) {
@@ -195,13 +199,13 @@ $("#char-4-button").on("click", function () {
         activeCharacter = this.value;
         activeCharacterID = "#char-4-button";
         activeCharacterOBJ = char4;
-        pickChar(activeCharacterID);
+        pickChar();
     }
-    else if (charSelected && !activeEnemy && char4.hitPoints > 0) {
+    else if (charSelected && !activeEnemy && char4.hitPoints > 0 && activeCharacterOBJ != char4) {
         activeEnemy = this.value;
         activeEnemyID = "#char-4-button";
         activeEnemyOBJ = char4;
-        pickChar(activeEnemyID);
+        pickChar();
         console.log(activeEnemy);
     }
     else if (charSelected && !activeEnemy && char4.hitPoints < 1) {
